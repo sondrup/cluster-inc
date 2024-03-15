@@ -72,11 +72,11 @@ spec:
           path: /spec/template/spec/containers/0/readinessProbe/httpGet/port
           value: http-prom
         - op: replace
-          path: /spec/template/spec/containers/0/readinessProbe/httpGet/patch
+          path: /spec/template/spec/containers/0/readinessProbe/httpGet/path
           value: /metrics
         - op: replace
           path: /spec/template/spec/containers/0/livenessProbe/httpGet/port
           value: http-prom
         - op: replace
-          path: /spec/template/spec/containers/0/livenessProbe/httpGet/patch
+          path: /spec/template/spec/containers/0/livenessProbe/httpGet/path
           value: /metrics
