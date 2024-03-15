@@ -1,0 +1,55 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: flux-kcl-controller
+  namespace: sondrup-gitops-system
+spec:
+  interval: 5m
+  url: https://github.com/kcl-lang/flux-kcl-controller.git
+  ignore: |
+    /*
+    !/config
+    /config/*
+    !/config/crd
+    !/config/manager
+  ref:
+    tag: v0.1.1
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-kcl-crd
+  namespace: sondrup-gitops-system
+spec:
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-kcl-controller
+  path: ./config/crd
+  prune: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-kcl-controller
+  namespace: sondrup-gitops-system
+spec:
+  dependsOn:
+    - name: flux-kcl-crd
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-kcl-controller
+  path: ./config/manager
+  prune: true
+  patchesStrategicMerge:
+    - |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: kcl-controller
+      spec:
+        template:
+          spec:
+            serviceAccountName: kustomize-controller
