@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: flux-kcl-controller
-  namespace: sondrup-gitops-system
+  namespace: "${gitops_namespace}"
 spec:
   interval: 5m
   url: https://github.com/kcl-lang/flux-kcl-controller.git
@@ -20,7 +20,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: flux-kcl-crd
-  namespace: sondrup-gitops-system
+  namespace: "${gitops_namespace}"
 spec:
   interval: 5m
   sourceRef:
@@ -33,7 +33,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: flux-kcl-controller
-  namespace: sondrup-gitops-system
+  namespace: "${gitops_namespace}"
 spec:
   dependsOn:
     - name: flux-kcl-crd
@@ -43,7 +43,7 @@ spec:
     name: flux-kcl-controller
   path: ./config/manager
   prune: true
-  targetNamespace: sondrup-gitops-system
+  targetNamespace: "${gitops_namespace}"
   patches:
     - patch: |-
         apiVersion: apps/v1
