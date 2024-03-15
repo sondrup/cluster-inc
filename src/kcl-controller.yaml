@@ -56,10 +56,9 @@ spec:
               serviceAccountName: kustomize-controller
               affinity:
                 nodeAffinity:
-                  preferredDuringSchedulingIgnoredDuringExecution:
-                    - weight: 1
-                      preference:
-                        matchExpressions:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                      - matchExpressions:
                           - key: kubernetes.io/arch
                             operator: In
                             values:
